@@ -2,9 +2,94 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
+import bcrypt from "bcryptjs";
 
 export default function SignInPage() {
+  const router = useRouter();
+
+  // state หลัก
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // ฟังก์ชัน alert แบบ custom
+  const alertStyled = (message: string, success: boolean) => {
+    if (typeof window === "undefined") return;
+    const color = success ? "bg-green-600" : "bg-red-600";
+    const div = document.createElement("div");
+    div.className = `fixed inset-0 flex items-center justify-center z-50`;
+    div.innerHTML = `
+      <div class='${color} text-white px-10 py-6 rounded-lg shadow-lg text-center space-y-4'>
+        <p class='text-lg font-semibold'>${message}</p>
+        <button id='okBtn' class='bg-white text-black px-4 py-2 rounded font-semibold hover:bg-gray-200 transition'>OK</button>
+      </div>
+    `;
+    document.body.appendChild(div);
+    document
+      .getElementById("okBtn")
+      ?.addEventListener("click", () => div.remove());
+  };
+
+  // ฟังก์ชัน login
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alertStyled("กรุณากรอกอีเมลและรหัสผ่าน", false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const { data, error } = await supabase
+        .from("user_tb")
+        .select("user_id, email, password")
+        .eq("email", email)
+        .maybeSingle();
+
+      if (error || !data) {
+        alertStyled("ไม่พบบัญชีนี้ในระบบ", false);
+        return;
+      }
+
+      const stored = data.password as string;
+      let isMatch = false;
+
+      if (typeof stored === "string" && stored.startsWith("$2")) {
+        isMatch = await bcrypt.compare(password, stored);
+      } else {
+        isMatch = password === stored;
+        if (isMatch) {
+          const newHashed = await bcrypt.hash(password, 10);
+          await supabase
+            .from("user_tb")
+            .update({ password: newHashed })
+            .eq("user_id", data.user_id);
+        }
+      }
+
+      if (!isMatch) {
+        alertStyled("รหัสผ่านไม่ถูกต้อง", false);
+        return;
+      }
+
+      // ✅ เก็บ user_id ใน localStorage
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user_id", data.user_id);
+      }
+
+      alertStyled("เข้าสู่ระบบสำเร็จ!", true);
+
+      // ✅ ไปหน้า /home แทน
+      router.push("/home");
+    } catch {
+      alertStyled("เกิดข้อผิดพลาดในการเข้าสู่ระบบ", false);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white px-4">
@@ -30,6 +115,8 @@ export default function SignInPage() {
               type="email"
               placeholder="example@email.com"
               className="mt-1 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none p-2"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -46,6 +133,8 @@ export default function SignInPage() {
               type={showPassword ? "text" : "password"}
               placeholder="********"
               className="mt-1 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none p-2 pr-10"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <button
               type="button"
@@ -97,32 +186,17 @@ export default function SignInPage() {
               )}
             </button>
           </div>
-
-          {/* Remember Me + Forgot Password */}
-          <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center gap-2 text-gray-600">
-              <input
-                id="remember_me"
-                type="checkbox"
-                className="accent-blue-500"
-              />
-              <span>Remember me</span>
-            </label>
-            <a href="#" className="text-blue-600 hover:underline">
-              Forgot password?
-            </a>
-          </div>
         </div>
 
         {/* Sign In Button */}
-        <Link href="/home">
-          <button
-            id="signin_button"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
-          >
-            Sign In
-          </button>
-        </Link>
+        <button
+          id="signin_button"
+          onClick={handleLogin}
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+        >
+          {loading ? "Signing in..." : "Sign In"}
+        </button>
 
         {/* Divider */}
         <div className="flex items-center justify-center gap-2 text-gray-400 text-sm">

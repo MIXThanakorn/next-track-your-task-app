@@ -23,7 +23,9 @@ export default function HomeLayout({
 
       {/* Content */}
       <main
-        className={`flex-1 transition-all duration-500 ease-in-out ${
+        className={`${
+          prompt.className
+        } flex-1 transition-all duration-500 ease-in-out ${
           expanded ? "ml-48" : "ml-16"
         }`}
       >

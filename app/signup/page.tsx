@@ -3,24 +3,143 @@
 import { useState, ChangeEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { supabase } from "@/lib/supabaseClient";
+import bcrypt from "bcryptjs";
 
 export default function SignUpPage() {
   const [preview, setPreview] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [gender, setGender] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // แสดง preview ของรูปภาพเมื่อผู้ใช้เลือกไฟล์
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => setPreview(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
 
+  // ลบรูปภาพออกจาก preview
   const handleRemoveImage = () => {
     setPreview(null);
+    setImageFile(null);
     const input = document.getElementById("profile_image") as HTMLInputElement;
     if (input) input.value = "";
+  };
+
+  // รีเซ็ตฟอร์ม
+  const handleReset = () => {
+    setFullname("");
+    setEmail("");
+    setPassword("");
+    setPhone("");
+    setGender("");
+    setPreview(null);
+    setImageFile(null);
+    const fileInput = document.getElementById(
+      "profileImage"
+    ) as HTMLInputElement;
+    if (fileInput) fileInput.value = "";
+  };
+
+  // ✅ ฟังก์ชันหลักในการสมัครสมาชิก
+  const handleSubmit = async () => {
+    if (!fullname || !email || !password || !gender || !phone) {
+      alertStyled("กรุณากรอกข้อมูลให้ครบถ้วน", false);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // 🔎 ตรวจสอบว่ามีอีเมลนี้ในระบบหรือยัง
+      const { data: existingUser, error: checkError } = await supabase
+        .from("user_tb")
+        .select("user_id")
+        .eq("email", email)
+        .maybeSingle();
+      if (checkError) throw checkError;
+      if (existingUser) {
+        alertStyled("อีเมลนี้ถูกใช้ไปแล้ว", false);
+        setLoading(false);
+        return;
+      }
+
+      // 🔐 เข้ารหัสรหัสผ่านก่อนเก็บในฐานข้อมูล
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      let imageUrl = null;
+      // 🧩 ถ้ามีอัปโหลดรูป จะอัปโหลดไปยัง bucket user_bk
+      if (imageFile) {
+        const fileName = `${Date.now()}_${imageFile.name}`;
+        const { error: uploadError } = await supabase.storage
+          .from("user_bk")
+          .upload(fileName, imageFile);
+        if (uploadError) throw uploadError;
+
+        // 🌐 ดึงลิงก์แบบ public ของรูป
+        const { data: publicUrl } = supabase.storage
+          .from("user_bk")
+          .getPublicUrl(fileName);
+        imageUrl = publicUrl.publicUrl;
+      }
+
+      // 🧾 บันทึกข้อมูลลงตาราง user_tb
+      const { error: insertError } = await supabase.from("user_tb").insert([
+        {
+          fullname,
+          email,
+          phone_num: phone,
+          password: hashedPassword,
+          gender,
+          image_url: imageUrl,
+          created_at: new Date().toISOString(),
+        },
+      ]);
+      if (insertError) throw insertError;
+
+      // สมัครสำเร็จ
+      alertStyled("สมัครสมาชิกสำเร็จ!", true, () => {
+        window.location.href = "/signin";
+      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alertStyled(`เกิดข้อผิดพลาด: ${error.message}`, false);
+      } else {
+        alertStyled("เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ", false);
+      }
+    }
+  };
+
+  // 🪧 ฟังก์ชันแสดงข้อความแจ้งเตือน
+  const alertStyled = (
+    message: string,
+    success: boolean,
+    callback?: () => void
+  ) => {
+    const bgColor = success ? "bg-blue-500" : "bg-red-500";
+    const modal = document.createElement("div");
+    modal.className = `fixed inset-0 flex items-center justify-center bg-black/60 z-50`;
+    modal.innerHTML = `
+      <div class='rounded-xl p-6 ${bgColor} text-white shadow-xl text-center w-80'>
+        <p class='mb-4 text-lg font-semibold'>${message}</p>
+        <button class='mt-2 rounded-full bg-white/20 px-6 py-2 text-white hover:bg-white/30 transition'>OK</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    modal.querySelector("button")?.addEventListener("click", () => {
+      modal.remove();
+      if (callback) callback();
+    });
   };
 
   return (
@@ -83,6 +202,8 @@ export default function SignUpPage() {
               type="text"
               placeholder="Enter your full name"
               className="mt-1 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none p-2"
+              value={fullname}
+              onChange={(e) => setFullname(e.target.value)}
             />
           </div>
 
@@ -98,6 +219,8 @@ export default function SignUpPage() {
               type="email"
               placeholder="example@email.com"
               className="mt-1 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none p-2"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -113,6 +236,8 @@ export default function SignUpPage() {
               type="tel"
               placeholder="e.g. 0812345678"
               className="mt-1 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none p-2"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
           </div>
 
@@ -129,6 +254,8 @@ export default function SignUpPage() {
               type={showPassword ? "text" : "password"}
               placeholder="********"
               className="mt-1 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none p-2 pr-10"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <button
               type="button"
@@ -136,7 +263,6 @@ export default function SignUpPage() {
               className="absolute right-3 top-[34px] text-gray-500 hover:text-blue-500 transition"
             >
               {showPassword ? (
-                // 👁 Hide icon
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
@@ -154,7 +280,6 @@ export default function SignUpPage() {
                   />
                 </svg>
               ) : (
-                // 👁 Show icon
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
@@ -192,6 +317,9 @@ export default function SignUpPage() {
                   type="radio"
                   name="gender"
                   id="gender_male"
+                  value="Male"
+                  checked={gender === "Male"}
+                  onChange={(e) => setGender(e.target.value)}
                   className="text-blue-500"
                 />
                 <span>Male</span>
@@ -201,6 +329,9 @@ export default function SignUpPage() {
                   type="radio"
                   name="gender"
                   id="gender_female"
+                  value="Female"
+                  checked={gender === "Female"}
+                  onChange={(e) => setGender(e.target.value)}
                   className="text-blue-500"
                 />
                 <span>Female</span>
@@ -210,6 +341,9 @@ export default function SignUpPage() {
                   type="radio"
                   name="gender"
                   id="gender_other"
+                  value="Other"
+                  checked={gender === "Other"}
+                  onChange={(e) => setGender(e.target.value)}
                   className="text-blue-500"
                 />
                 <span>Other</span>
@@ -219,12 +353,24 @@ export default function SignUpPage() {
         </div>
 
         {/* Submit Button */}
-        <button
-          id="signup_button"
-          className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
-        >
-          Sign Up
-        </button>
+        <div className="flex justify-between">
+          <button
+            id="signup_button"
+            onClick={handleSubmit}
+            disabled={loading}
+            className="w-full mr-2 bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+          >
+            {loading ? "Processing..." : "Sign Up"}
+          </button>
+          <button
+            id="reset_button"
+            onClick={handleReset}
+            disabled={loading}
+            className="w-full ml-2 bg-orange-600 text-white py-2 rounded-lg font-medium hover:bg-orange-700 transition"
+          >
+            Reset
+          </button>
+        </div>
 
         {/* Signin link */}
         <p className="text-center text-sm text-gray-600">
