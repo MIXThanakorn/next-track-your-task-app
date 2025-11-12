@@ -18,7 +18,7 @@ export default function SignInPage() {
   // ฟังก์ชัน alert แบบ custom
   const alertStyled = (message: string, success: boolean) => {
     if (typeof window === "undefined") return;
-    const color = success ? "bg-green-600" : "bg-red-600";
+    const color = success ? "bg-blue-600" : "bg-red-600";
     const div = document.createElement("div");
     div.className = `fixed inset-0 flex items-center justify-center z-50`;
     div.innerHTML = `
@@ -45,7 +45,7 @@ export default function SignInPage() {
 
       const { data, error } = await supabase
         .from("user_tb")
-        .select("user_id, email, password")
+        .select("user_id, email, password") // ✅ ใช้ user_id
         .eq("email", email)
         .maybeSingle();
 
@@ -57,6 +57,7 @@ export default function SignInPage() {
       const stored = data.password as string;
       let isMatch = false;
 
+      // ✅ ตรวจสอบ password
       if (typeof stored === "string" && stored.startsWith("$2")) {
         isMatch = await bcrypt.compare(password, stored);
       } else {
@@ -66,7 +67,7 @@ export default function SignInPage() {
           await supabase
             .from("user_tb")
             .update({ password: newHashed })
-            .eq("user_id", data.user_id);
+            .eq("user_id", data.user_id); // ✅ ใช้ user_id ตรงกับ DB
         }
       }
 
@@ -75,15 +76,13 @@ export default function SignInPage() {
         return;
       }
 
-      // ✅ เก็บ user_id ใน localStorage
-      if (typeof window !== "undefined") {
+      // ✅ เก็บ user_id จริงจาก DB
+      if (typeof window !== "undefined" && data.user_id) {
         localStorage.setItem("user_id", data.user_id);
       }
 
       alertStyled("เข้าสู่ระบบสำเร็จ!", true);
-
-      // ✅ ไปหน้า /home แทน
-      router.push("/home");
+      router.push("/dashboard");
     } catch {
       alertStyled("เกิดข้อผิดพลาดในการเข้าสู่ระบบ", false);
     } finally {

@@ -12,6 +12,7 @@ export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   const [fullname, setFullname] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -40,6 +41,7 @@ export default function SignUpPage() {
   // รีเซ็ตฟอร์ม
   const handleReset = () => {
     setFullname("");
+    setUsername("");
     setEmail("");
     setPassword("");
     setPhone("");
@@ -97,6 +99,7 @@ export default function SignUpPage() {
       const { error: insertError } = await supabase.from("user_tb").insert([
         {
           fullname,
+          username,
           email,
           phone_num: phone,
           password: hashedPassword,
@@ -190,6 +193,22 @@ export default function SignUpPage() {
 
         {/* Form Fields */}
         <div className="space-y-4">
+          <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-700"
+            >
+              User Name
+            </label>
+            <input
+              id="username"
+              type="text"
+              placeholder="Enter your user name"
+              className="mt-1 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none p-2"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
           <div>
             <label
               htmlFor="fullname"
@@ -358,7 +377,7 @@ export default function SignUpPage() {
             id="signup_button"
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full mr-2 bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+            className="w-full mr-2 bg-blue-500 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
           >
             {loading ? "Processing..." : "Sign Up"}
           </button>
@@ -366,7 +385,7 @@ export default function SignUpPage() {
             id="reset_button"
             onClick={handleReset}
             disabled={loading}
-            className="w-full ml-2 bg-orange-600 text-white py-2 rounded-lg font-medium hover:bg-orange-700 transition"
+            className="w-full ml-2 bg-orange-400 text-white py-2 rounded-lg font-medium hover:bg-orange-600 transition"
           >
             Reset
           </button>
