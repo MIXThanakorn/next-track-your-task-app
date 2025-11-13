@@ -60,7 +60,7 @@ export default function DashboardHeader() {
               className="flex items-center cursor-pointer hover:opacity-80 transition"
             >
               {/* ชื่อผู้ใช้ */}
-              <span className="hidden sm:inline text-blue-700 font-medium mr-2">
+              <span className="hidden sm:inline text-blue-700 text-l font-semibold mr-2">
                 {user.username}
               </span>
 

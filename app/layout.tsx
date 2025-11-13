@@ -3,7 +3,7 @@ import { Prompt } from "next/font/google";
 import "./globals.css";
 
 const prompt = Prompt({
-  subsets: ["latin"],
+  subsets: ["latin", "thai"],
   weight: ["400", "500", "600", "700"],
 });
 
