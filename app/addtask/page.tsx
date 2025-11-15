@@ -10,7 +10,6 @@ export default function AddTaskPage() {
   const [taskName, setTaskName] = useState("");
   const [taskDetail, setTaskDetail] = useState("");
   const [dueDate, setDueDate] = useState("");
-  const [startDate, setStartDate] = useState("");
   const [priority, setPriority] = useState("low");
   const [loading, setLoading] = useState(false);
 
@@ -43,7 +42,6 @@ export default function AddTaskPage() {
         {
           task_name: taskName,
           task_detail: taskDetail,
-          start_date: startDate,
           due_date: dueDate,
           priority: priority,
           status: "todo",
@@ -163,39 +161,6 @@ export default function AddTaskPage() {
               value={taskDetail}
               onChange={(e) => setTaskDetail(e.target.value)}
             />
-          </div>
-
-          {/* Start Date with Calendar Icon */}
-          <div>
-            <label
-              htmlFor="due_date"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Start Date <span className="text-red-500">*</span>
-            </label>
-            <div className="relative">
-              <input
-                id="start_date"
-                type="date"
-                className="w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none p-3 pr-10"
-                value={startDate}
-                onChange={(e) => setDueDate(e.target.value)}
-              />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-            </div>
           </div>
 
           {/* Due Date with Calendar Icon */}

@@ -5,6 +5,7 @@ import TaskCard from "@/components/taskcard";
 import { supabase } from "@/lib/supabaseClient";
 import { TaskItem } from "@/types/task";
 import { useRouter } from "next/navigation";
+import { start } from "repl";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -86,6 +87,7 @@ export default function DashboardPage() {
       .update({
         status: "in_progress",
         update_at: new Date().toISOString(),
+        start_date: new Date().toISOString(),
       })
       .eq("task_id", id);
 

@@ -40,7 +40,7 @@ export default function DashboardHeader() {
   };
 
   return (
-    <header className="bg-white shadow-md border-b border-gray-700">
+    <header className="bg-white shadow-md ">
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
         {/* ✅ Logo & Title */}
         <div className="flex items-center space-x-2">

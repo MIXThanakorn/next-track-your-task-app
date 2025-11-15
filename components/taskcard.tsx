@@ -46,7 +46,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
 
   // สีของ status
   const statusColor = {
-    todo: "text-gray-500",
+    todo: "text-gray-800",
     in_progress: "text-yellow-600",
     done: "text-green-600",
     over_due: "text-red-600",
@@ -54,7 +54,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
 
   // สีของแถบด้านล่าง
   const barColor = {
-    todo: "bg-gray-400",
+    todo: "bg-gray-600",
     in_progress: "bg-yellow-500",
     done: "bg-green-500",
     over_due: "bg-red-500",
@@ -90,10 +90,12 @@ const TaskCard: React.FC<TaskCardProps> = ({
         {task.status.replace("_", " ").toUpperCase()}
       </p>
 
-      {/* Due Date */}
-      <p className="text-sm text-center text-blue-700 mt-2">
-        start : {task.start_date}
-      </p>
+      {/* Start Date */}
+      {task.start_date && (
+        <p className="text-sm text-center text-blue-700 mt-2">
+          Start : {task.start_date}
+        </p>
+      )}
 
       {/* Due Date */}
       <p className="text-sm text-center text-blue-700 mt-2">
