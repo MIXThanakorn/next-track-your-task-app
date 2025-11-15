@@ -20,7 +20,7 @@ interface User {
 interface Task {
   task_id: string;
   user_id: string;
-  status: "todo" | "complete" | "overdue";
+  status: "todo" | "in_progress" | "done" | "overdue";
   title: string;
   description?: string;
   due_date?: string;
@@ -65,7 +65,10 @@ export default function ProfilePage() {
   // --- สถิติ ---
   const totalTasks = tasks.length || 0;
   const todoCount = tasks.filter((t) => t.status === "todo").length;
-  const doneCount = tasks.filter((t) => t.status === "complete").length;
+  const inprogressCount = tasks.filter(
+    (t) => t.status === "in_progress"
+  ).length;
+  const doneCount = tasks.filter((t) => t.status === "done").length;
   const overdueCount = tasks.filter((t) => t.status === "overdue").length;
 
   // --- แก้ไขโปรไฟล์ ---
@@ -185,13 +188,13 @@ export default function ProfilePage() {
           {[
             { label: "Fullname", key: "fullname" as keyof User },
             { label: "Username", key: "username" as keyof User },
-            { label: "Email", key: "email" as keyof User, readonly: true },
+            { label: "Email", key: "email" as keyof User },
             { label: "Phone", key: "phone_num" as keyof User },
             { label: "Gender", key: "gender" as keyof User, type: "select" },
           ].map((field) => (
             <div key={field.key}>
               <label className="text-sm text-gray-600">{field.label}</label>
-              {editing && !field.readonly ? (
+              {editing ? (
                 field.type === "select" ? (
                   <select
                     value={String(user[field.key] || "")}
@@ -230,47 +233,95 @@ export default function ProfilePage() {
             {totalTasks === 0 ? (
               <p className="text-gray-500">กรุณาบันทึกข้อมูลงานที่ต้องทำ</p>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div>
-                  <p className="text-blue-600 font-semibold">ทั้งหมด</p>
-                  <p>{totalTasks || "-"}</p>
+              <div className="space-y-4">
+                {/* ทั้งหมด */}
+                <div className="flex justify-center">
+                  <div className="text-center">
+                    <p className="text-blue-600 font-semibold">ทั้งหมด</p>
+                    <p>{totalTasks || "-"}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-yellow-600 font-semibold">ค้างอยู่</p>
-                  <p>{todoCount || "-"}</p>
+
+                {/*ค้างอยู่ / กำลังทำ */}
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div>
+                    <p className="text-gray-600 font-semibold">ค้างอยู่</p>
+                    <p>{todoCount || "-"}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-yellow-600 font-semibold">กำลังทำ</p>
+                    <p>{inprogressCount || "-"}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-green-600 font-semibold">เสร็จแล้ว</p>
-                  <p>{doneCount || "-"}</p>
-                </div>
-                <div>
-                  <p className="text-red-600 font-semibold">เลยกำหนด</p>
-                  <p>{overdueCount || "-"}</p>
+
+                {/* เสร็จแล้ว / เลยกำหนด */}
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div>
+                    <p className="text-green-600 font-semibold">เสร็จแล้ว</p>
+                    <p>{doneCount || "-"}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-red-600 font-semibold">เลยกำหนด</p>
+                    <p>{overdueCount || "-"}</p>
+                  </div>
                 </div>
               </div>
             )}
           </div>
         )}
 
-        {/* ปุ่ม */}
-        <div className="text-center">
+        {/* ปุ่ม Edit / Cancel + Logout */}
+        <div className="flex items-center justify-center gap-4">
           {editing ? (
-            <button
-              onClick={handleConfirm}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition"
-            >
-              Confirm Edit
-            </button>
+            <>
+              {/* ปุ่ม Confirm */}
+              <button
+                onClick={handleConfirm}
+                className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition"
+              >
+                Confirm Edit
+              </button>
+
+              {/* ปุ่ม Cancel */}
+              <button
+                onClick={() => {
+                  setEditing(false);
+                  setPreview(null);
+                  setUploadFile(null);
+                  fetchUser(); // โหลดข้อมูลเดิมกลับมาเพื่อยกเลิกการแก้ไข
+                }}
+                className="bg-gray-400 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-500 transition"
+              >
+                Cancel
+              </button>
+            </>
           ) : (
-            <button
-              onClick={handleEdit}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
-            >
-              Edit Profile
-            </button>
+            <>
+              {/* ปุ่ม Edit */}
+              <button
+                onClick={() => setEditing(true)}
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+              >
+                Edit Profile
+              </button>
+
+              {/* ปุ่ม Logout */}
+              <button
+                onClick={() => {
+                  localStorage.removeItem("user_id");
+                  window.location.href = "/signin";
+                }}
+                className="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition"
+              >
+                Log Out
+              </button>
+            </>
           )}
         </div>
-        <div className="text-center">
+
+        <div className="text-center mt-4">
           <Link
             href="/dashboard"
             className="text-sm text-blue-500 hover:underline"
