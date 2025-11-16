@@ -5,7 +5,7 @@ export interface TaskItem {
   created_at: string;
   update_at: string;
   priority: "low" | "medium" | "high";
-  status: "todo" | "in_progress" | "done" | "over_due";
+  status: "todo" | "in_progress" | "done" | "overdue";
   start_date: string;
   due_date: string;
   notification_status: boolean;

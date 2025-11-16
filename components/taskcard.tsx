@@ -49,7 +49,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
     todo: "text-gray-800",
     in_progress: "text-yellow-600",
     done: "text-green-600",
-    over_due: "text-red-600",
+    overdue: "text-red-600",
   }[task.status];
 
   // สีของแถบด้านล่าง
@@ -57,7 +57,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
     todo: "bg-gray-600",
     in_progress: "bg-yellow-500",
     done: "bg-green-500",
-    over_due: "bg-red-500",
+    overdue: "bg-red-500",
   }[task.status];
 
   return (
@@ -179,7 +179,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
         )}
 
         {/* Over due */}
-        {task.status === "over_due" && (
+        {task.status === "overdue" && (
           <div className="w-full flex justify-end">
             <button
               onClick={() => onDelete(task.task_id)}

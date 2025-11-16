@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import NotificationBell from "@/components/notificationbell";
 
 interface UserProfile {
   username: string;
@@ -40,31 +41,34 @@ export default function DashboardHeader() {
   };
 
   return (
-    <header className="bg-white shadow-md ">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-        {/* ✅ Logo & Title */}
+    <header className="bg-white shadow-md w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+        {/* ---------------------------------------------------------------- */}
+        {/*                     LOGO + TITLE (LEFT SIDE)                    */}
+        {/* ---------------------------------------------------------------- */}
         <div className="flex items-center space-x-2">
-          <div className="w-10 h-10 relative">
+          <div className="relative w-10 h-10 sm:w-12 sm:h-12">
             <Image src="/Logo.png" alt="Logo" fill className="object-contain" />
           </div>
-          <span className="text-xl font-semibold text-blue-700">
+
+          <span className="text-xl sm:text-2xl font-bold text-blue-700">
             Track Your Task
           </span>
         </div>
 
-        {/* ✅ Username + Profile */}
+        {/* ---------------------------------------------------------------- */}
+        {/*            RIGHT SIDE: Notification + Username + Avatar         */}
+        {/* ---------------------------------------------------------------- */}
         <div className="flex items-center space-x-3">
-          {user ? (
+          <NotificationBell />
+          {user && (
             <div
               onClick={handleClickProfile}
               className="flex items-center cursor-pointer hover:opacity-80 transition"
             >
-              {/* ชื่อผู้ใช้ */}
               <span className="hidden sm:inline text-blue-700 text-l font-semibold mr-2">
                 {user.username}
               </span>
-
-              {/* รูปโปรไฟล์ */}
               <div className="w-10 h-10 rounded-full overflow-hidden bg-blue-600 text-white font-bold border-2 border-blue-400 flex items-center justify-center">
                 {user.image_url ? (
                   <Image
@@ -82,8 +86,6 @@ export default function DashboardHeader() {
                 )}
               </div>
             </div>
-          ) : (
-            <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse"></div>
           )}
         </div>
       </div>
