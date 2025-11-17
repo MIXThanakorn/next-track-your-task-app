@@ -50,6 +50,7 @@ export default function NotificationBell() {
         <NotificationList
           notifications={notifications}
           onClose={() => setOpen(false)}
+          setNotifications={setNotifications}
         />
       )}
     </div>

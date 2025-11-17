@@ -19,6 +19,23 @@ export default function SignUpPage() {
   const [gender, setGender] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // ตรวจสอบ email format
+  const validateEmail = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  // ตรวจสอบเบอร์โทร (ต้องเป็นตัวเลข และยาว 10 หลัก)
+  const validatePhone = (phone: string) => {
+    const regex = /^[0-9]{10}$/;
+    return regex.test(phone);
+  };
+
+  // ตรวจสอบ password ความยาวขั้นต่ำ
+  const validatePassword = (password: string) => {
+    return password.length >= 6;
+  };
+
   // แสดง preview ของรูปภาพเมื่อผู้ใช้เลือกไฟล์
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -56,6 +73,20 @@ export default function SignUpPage() {
 
   // ✅ ฟังก์ชันหลักในการสมัครสมาชิก
   const handleSubmit = async () => {
+    if (!validateEmail(email)) {
+      alertStyled("รูปแบบอีเมลไม่ถูกต้อง", false);
+      return;
+    }
+
+    if (!validatePhone(phone)) {
+      alertStyled("เบอร์โทรต้องเป็นตัวเลข 10 หลัก", false);
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      alertStyled("รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร", false);
+      return;
+    }
     if (!fullname || !email || !password || !gender || !phone) {
       alertStyled("กรุณากรอกข้อมูลให้ครบถ้วน", false);
       return;
@@ -158,12 +189,11 @@ export default function SignUpPage() {
         {/* Upload Image */}
         <div className="flex flex-col items-center gap-3">
           {preview ? (
-            <div className="relative">
+            <div className="relative w-28 h-28">
               <Image
                 src={preview}
                 alt="Profile preview"
-                width={120}
-                height={120}
+                fill
                 className="rounded-full object-cover border border-blue-200"
               />
               <button
@@ -236,7 +266,7 @@ export default function SignUpPage() {
             <input
               id="email"
               type="email"
-              placeholder="example@email.com"
+              placeholder="example@mail.com"
               className="mt-1 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none p-2"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -253,10 +283,13 @@ export default function SignUpPage() {
             <input
               id="phone"
               type="tel"
-              placeholder="e.g. 0812345678"
+              placeholder="10 digits number"
               className="mt-1 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none p-2"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, "");
+                setPhone(value.slice(0, 10));
+              }}
             />
           </div>
 
@@ -271,7 +304,7 @@ export default function SignUpPage() {
             <input
               id="password"
               type={showPassword ? "text" : "password"}
-              placeholder="********"
+              placeholder="Enter your password (min 6 characters)"
               className="mt-1 w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none p-2 pr-10"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

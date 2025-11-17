@@ -158,14 +158,16 @@ export default function ProfilePage() {
 
         {/* รูปโปรไฟล์ */}
         <div className="flex flex-col items-center space-y-4">
-          <div className="relative">
-            <Image
-              src={preview || user.image_url || "/default_profile.png"}
-              alt="profile"
-              width={120}
-              height={120}
-              className="rounded-full object-cover border-4 border-blue-300 shadow-md"
-            />
+          <div className="relative w-[120px] h-[120px]">
+            <div className="absolute inset-0">
+              <Image
+                src={preview || user.image_url || "/default_profile.png"}
+                alt="profile"
+                fill
+                className="rounded-full object-cover border-4 border-blue-300 shadow-md"
+              />
+            </div>
+
             {editing && (
               <input
                 type="file"

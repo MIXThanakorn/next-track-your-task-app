@@ -2,14 +2,30 @@
 
 import React from "react";
 import { TaskNotification } from "@/types/notification";
+import { supabase } from "@/lib/supabaseClient";
 import { format } from "date-fns";
 
 interface Props {
   notifications: TaskNotification[];
   onClose: () => void;
+  setNotifications: React.Dispatch<React.SetStateAction<TaskNotification[]>>;
 }
 
-export default function NotificationList({ notifications, onClose }: Props) {
+export default function NotificationList({
+  notifications,
+  onClose,
+  setNotifications,
+}: Props) {
+  const handleMarkAsRead = async (task_id: string) => {
+    await supabase
+      .from("task_tb")
+      .update({ notification_status: false })
+      .eq("task_id", task_id);
+
+    // ❗ ลบออกจาก state เพื่อหายจาก UI ทันที
+    setNotifications((prev) => prev.filter((n) => n.task_id !== task_id));
+  };
+
   return (
     <div className="absolute top-14 right-0 w-80 bg-white shadow-lg rounded-lg border border-gray-200 overflow-hidden animate-slideDown z-50">
       <div className="p-4 border-b border-gray-200 font-semibold text-blue-700">
@@ -52,7 +68,7 @@ export default function NotificationList({ notifications, onClose }: Props) {
             return (
               <div
                 key={n.task_id}
-                className="flex flex-col p-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition"
+                className="flex flex-col p-3 border-b border-gray-100 hover:bg-gray-50 transition"
               >
                 <div className="flex items-center justify-between">
                   <div className={`w-2 h-6 ${statusColor} mr-2 rounded`} />
@@ -68,9 +84,18 @@ export default function NotificationList({ notifications, onClose }: Props) {
                     {n.priority}
                   </div>
                 </div>
+
                 <div className="text-xs text-gray-400 mt-1">
                   Due: {format(new Date(n.due_date), "dd/MM/yyyy")}
                 </div>
+
+                {/* ✅ ปุ่ม Mark as Read */}
+                <button
+                  onClick={() => handleMarkAsRead(n.task_id)}
+                  className="mt-2 text-xs text-blue-600 hover:text-blue-800 hover:underline self-end"
+                >
+                  Mark as read
+                </button>
               </div>
             );
           })

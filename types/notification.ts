@@ -1,5 +1,5 @@
 export interface TaskNotification {
-  task_id: number;
+  task_id: string;
   task_name: string;
   status: "todo" | "in_progress" | "overdue";
   priority: "low" | "medium" | "high";
