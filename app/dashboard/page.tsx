@@ -133,7 +133,7 @@ export default function DashboardPage() {
   };
 
   const handleEdit = (id: string) => {
-    localStorage.setItem("edit_task_id", id);
+    localStorage.setItem("task_id", id);
     router.push("/edittask");
   };
 
