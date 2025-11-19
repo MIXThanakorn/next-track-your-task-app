@@ -219,7 +219,7 @@ export default function DashboardPage() {
   return (
     <div className="p-6 min-h-screen bg-[#f8fbff]">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold text-blue-700 mb-4">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-blue-700 mb-4">Analytic</h1>
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
