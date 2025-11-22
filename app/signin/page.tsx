@@ -93,11 +93,33 @@ export default function SignInPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-8 space-y-6 border border-blue-100">
+        <div className="flex items-center gap-3 mb-4">
+          <button
+            onClick={() => router.push("/")}
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            <span className="font-medium">Back to HomePage</span>
+          </button>
+        </div>
         <h1 className="text-2xl font-semibold text-center text-blue-600">
-          Welcome Back
+          ยินดีต้อนรับกลับ!
         </h1>
         <p className="text-center text-gray-500 text-sm">
-          Sign in to continue your journey
+          กรุณาเข้าสู่ระบบด้วยอีเมลและรหัสผ่านของคุณ
         </p>
 
         <div className="space-y-5">
@@ -125,7 +147,7 @@ export default function SignInPage() {
               htmlFor="signin_password"
               className="block text-sm font-medium text-gray-700"
             >
-              Password
+              รหัสผ่าน
             </label>
             <input
               id="signin_password"
@@ -200,18 +222,18 @@ export default function SignInPage() {
         {/* Divider */}
         <div className="flex items-center justify-center gap-2 text-gray-400 text-sm">
           <div className="h-px w-16 bg-gray-200"></div>
-          or
+          หรือ
           <div className="h-px w-16 bg-gray-200"></div>
         </div>
 
         {/* Sign Up Link */}
         <p className="text-center text-sm text-gray-600">
-          Don’t have an account?{" "}
+          ยังไม่มีบัญชี?{" "}
           <Link
             href="/signup"
             className="text-blue-600 font-medium hover:underline"
           >
-            Sign Up
+            สมัครสมาชิก
           </Link>
         </p>
       </div>

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Prompt } from "next/font/google";
 import SideMenu from "@/components/sidemenu";
 import DashboardHeader from "@/components/dashboardheader";
+import BottomMenu from "@/components/bottommenu";
 
 const prompt = Prompt({
   subsets: ["latin"],
@@ -19,27 +20,26 @@ export default function HomeLayout({
 
   return (
     <div className="flex flex-col bg-blue-50 min-h-screen">
-      {/* 🔹 Header ด้านบนสุด */}
+      {/* Header */}
       <div className="sticky top-0 z-40">
         <DashboardHeader />
       </div>
 
-      {/* 🔹 ส่วนล่าง: SideMenu + Main content */}
       <div className="flex flex-1">
-        {/* Sidebar ทางซ้าย */}
-        <SideMenu onExpandChange={setExpanded} />
+        {/* SideMenu: ซ่อนบนมือถือ (hidden md:block) */}
+        <div className="hidden md:block">
+          <SideMenu onExpandChange={setExpanded} />
+        </div>
 
-        {/* เนื้อหาหลักทางขวา */}
+        {/* Main content: ใช้ md:ml-20 หรือ md:ml-32 เมื่อ side ขยาย */}
         <main
-          className={`${
-            prompt.className
-          } flex-1 p-6 transition-all duration-500 ease-in-out ${
-            expanded ? "ml-32" : "ml-20"
-          }`}
+          className={`${prompt.className} flex-1 p-4 sm:p-6 transition-all duration-500 ease-in-out md:ml-0`}
         >
           {children}
         </main>
       </div>
+      {/* Bottom menu for mobile */}
+      <BottomMenu />
     </div>
   );
 }

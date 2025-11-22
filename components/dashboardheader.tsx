@@ -42,23 +42,19 @@ export default function DashboardHeader() {
 
   return (
     <header className="bg-white shadow-md w-full">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-        {/* ---------------------------------------------------------------- */}
-        {/*                     LOGO + TITLE (LEFT SIDE)                    */}
-        {/* ---------------------------------------------------------------- */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 flex items-center justify-between">
+        {/* LEFT */}
         <div className="flex items-center space-x-2">
-          <div className="relative w-10 h-10 sm:w-12 sm:h-12">
+          <div className="relative w-8 h-8 sm:w-10 sm:h-10">
             <Image src="/Logo.png" alt="Logo" fill className="object-contain" />
           </div>
 
-          <span className="text-xl sm:text-2xl font-bold text-blue-700">
+          <span className="text-lg sm:text-2xl font-bold text-blue-700">
             Track Your Task
           </span>
         </div>
 
-        {/* ---------------------------------------------------------------- */}
-        {/*            RIGHT SIDE: Notification + Username + Avatar         */}
-        {/* ---------------------------------------------------------------- */}
+        {/* RIGHT */}
         <div className="flex items-center space-x-3">
           <NotificationBell />
           {user && (
@@ -66,21 +62,21 @@ export default function DashboardHeader() {
               onClick={handleClickProfile}
               className="flex items-center cursor-pointer hover:opacity-80 transition"
             >
-              <span className="hidden sm:inline text-blue-700 text-l font-semibold mr-2">
+              <span className="hidden md:inline text-blue-700 text-sm font-semibold mr-2">
                 {user.username}
               </span>
-              <div className="w-10 h-10 rounded-full overflow-hidden bg-blue-600 text-white font-bold border-2 border-blue-400 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-full overflow-hidden bg-blue-600 text-white font-bold border-2 border-blue-400 flex items-center justify-center">
                 {user.image_url ? (
                   <Image
                     src={user.image_url}
                     alt="Avatar"
-                    width={40}
-                    height={40}
+                    width={36}
+                    height={36}
                     className="object-cover w-full h-full"
                     unoptimized
                   />
                 ) : (
-                  <span className="text-lg">
+                  <span className="text-sm">
                     {user.username[0].toUpperCase()}
                   </span>
                 )}

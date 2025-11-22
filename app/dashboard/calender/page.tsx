@@ -54,17 +54,17 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="min-h-screen bg-blue-50 p-6 flex flex-col items-center">
+    <div className="min-h-screen bg-blue-50 p-3 md:p-6 flex flex-col items-center">
       {/* header month */}
-      <div className="flex justify-between items-center w-full max-w-4xl mb-6">
+      <div className="flex justify-between items-center w-full max-w-4xl mb-4 md:mb-6">
         <button
           onClick={goPrevMonth}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          className="w-10 h-10 md:px-4 md:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center text-lg md:text-base"
         >
           &lt;
         </button>
 
-        <h2 className="text-2xl font-semibold text-blue-700">
+        <h2 className="text-lg md:text-2xl font-semibold text-blue-700 text-center">
           {currentMonth.toLocaleString("th-TH", {
             month: "long",
             year: "numeric",
@@ -73,15 +73,16 @@ export default function CalendarPage() {
 
         <button
           onClick={goNextMonth}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          className="w-10 h-10 md:px-4 md:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center text-lg md:text-base"
         >
           &gt;
         </button>
       </div>
-      <div className="w-full max-w-4xl flex justify-end mb-4">
+
+      <div className="w-full max-w-4xl flex justify-end mb-3 md:mb-4">
         <button
           onClick={() => (window.location.href = "/addtask")}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-md"
+          className="px-3 py-2 md:px-4 md:py-2 bg-blue-600 text-white text-sm md:text-base rounded-lg hover:bg-blue-700 transition shadow-md"
         >
           + Add Task
         </button>

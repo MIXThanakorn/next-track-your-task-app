@@ -18,7 +18,6 @@ const priorityColor: Record<string, string> = {
 export default function TaskPopup({ tasks, dateStr, onClose }: Props) {
   const [show, setShow] = useState(false);
 
-  // Slide-in animation
   useEffect(() => {
     setTimeout(() => setShow(true), 10);
   }, []);
@@ -30,15 +29,13 @@ export default function TaskPopup({ tasks, dateStr, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[999] p-4">
-      {/* Popup container */}
       <div
         className={`
           bg-white rounded-xl w-full max-w-lg shadow-xl transform transition-all duration-300 
           ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
         `}
-        style={{ height: "70vh" }} // FIXED HEIGHT
+        style={{ height: "70vh" }}
       >
-        {/* Header */}
         <div className="flex justify-between items-center p-5 border-b">
           <h2 className="text-xl font-semibold text-blue-700">
             งานประจำวันที่ {dateStr}
@@ -54,7 +51,6 @@ export default function TaskPopup({ tasks, dateStr, onClose }: Props) {
           </button>
         </div>
 
-        {/* CONTENT — SCROLLABLE */}
         <div
           className="overflow-y-auto p-5 space-y-4"
           style={{ height: "calc(70vh - 70px)" }}
@@ -87,17 +83,20 @@ export default function TaskPopup({ tasks, dateStr, onClose }: Props) {
 
               <p className="text-gray-600 mt-2">{t.task_detail}</p>
 
-              <div className="mt-3 flex justify-end">
-                <button
-                  className="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition"
-                  onClick={() => {
-                    localStorage.setItem("edit_task_id", t.task_id);
-                    window.location.href = "/edittask";
-                  }}
-                >
-                  Edit
-                </button>
-              </div>
+              {/* ซ่อนปุ่มแก้ไข ถ้า status = done หรือ overdue */}
+              {t.status !== "done" && t.status !== "overdue" && (
+                <div className="mt-3 flex justify-end">
+                  <button
+                    className="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition"
+                    onClick={() => {
+                      localStorage.setItem("edit_task_id", t.task_id);
+                      window.location.href = "/edittask";
+                    }}
+                  >
+                    Edit
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>

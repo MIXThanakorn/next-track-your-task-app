@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 type MenuItem = {
   name: string;
   path: string;
-  icon: string; // placeholder
+  icon: string;
 };
 
 const menuItems: MenuItem[] = [
@@ -35,9 +35,11 @@ export default function SideMenu({ onExpandChange }: SideMenuProps) {
   };
 
   return (
+    // hidden on small screens, visible from md
     <div
-      className={`fixed left-0  h-screen bg-white border-r border-blue-200 shadow-md flex flex-col py-6 space-y-4 transition-all duration-500 ease-in-out z-50
+      className={`fixed left-0 h-screen bg-white border-r border-blue-200 shadow-md flex flex-col py-6 space-y-4 transition-all duration-300 ease-in-out z-50
         ${expanded ? "w-48" : "w-16"}
+        hidden md:flex
       `}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -54,9 +56,9 @@ export default function SideMenu({ onExpandChange }: SideMenuProps) {
                 isActive
                   ? "bg-blue-100 text-blue-700 font-semibold"
                   : "text-blue-600 hover:bg-blue-50 hover:text-blue-700"
-              }`}
+              }
+            `}
           >
-            {/* Icon */}
             <div
               className={`text-2xl flex-shrink-0 transition-transform duration-300 ease-in-out ${
                 isActive ? "scale-125" : "group-hover:scale-110"
@@ -65,7 +67,6 @@ export default function SideMenu({ onExpandChange }: SideMenuProps) {
               {item.icon}
             </div>
 
-            {/* Text */}
             <span
               className={`ml-3 text-sm whitespace-nowrap transition-all duration-500 ease-in-out ${
                 expanded

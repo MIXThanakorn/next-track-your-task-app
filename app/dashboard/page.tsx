@@ -86,7 +86,7 @@ export default function DashboardPage() {
   // No tasks at all
   if (tasks.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[70vh]">
+      <div className="flex flex-col items-center justify-center h-[70vh] p-6">
         <p className="text-xl mb-4">กรุณาเพิ่มงานของคุณ</p>
         <button
           className="bg-blue-600 text-white px-5 py-2 rounded-lg"
@@ -138,97 +138,59 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      {/* Header */}
-      <div className="bg-white shadow-md p-4 rounded-xl flex flex-col md:flex-row gap-4 items-center">
-        <select
-          className="border rounded-lg px-3 py-2"
-          onChange={(e) =>
-            setStatusFilter(e.target.value === "none" ? null : e.target.value)
-          }
-        >
-          <option value="none">Status (ทั้งหมด)</option>
-          <option value="todo">To do</option>
-          <option value="in_progress">In progress</option>
-          <option value="done">Done</option>
-          <option value="over_due">Over Due</option>
-        </select>
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
+      {/* Header: responsive grid (1 col on mobile, row on md+) */}
+      <div className="bg-white shadow-md p-4 rounded-xl grid grid-cols-1 sm:grid-cols-2 md:flex md:items-center gap-3 md:gap-4">
+        <div className="flex gap-3 w-full">
+          <select
+            className="border rounded-lg px-3 py-2 w-1/2 sm:w-40"
+            onChange={(e) =>
+              setStatusFilter(e.target.value === "none" ? null : e.target.value)
+            }
+          >
+            <option value="none">Status (ทั้งหมด)</option>
+            <option value="todo">To do</option>
+            <option value="in_progress">In progress</option>
+            <option value="done">Done</option>
+            <option value="overdue">Over Due</option>
+          </select>
 
-        <select
-          className="border rounded-lg px-3 py-2"
-          onChange={(e) =>
-            setPriorityFilter(e.target.value === "none" ? null : e.target.value)
-          }
-        >
-          <option value="none">Priority (ทั้งหมด)</option>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
+          <select
+            className="border rounded-lg px-3 py-2 w-1/2 sm:w-40"
+            onChange={(e) =>
+              setPriorityFilter(
+                e.target.value === "none" ? null : e.target.value
+              )
+            }
+          >
+            <option value="none">Priority (ทั้งหมด)</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
 
-        <input
-          type="text"
-          placeholder="ค้นหา งาน..."
-          className="border rounded-lg px-3 py-2 flex-1"
-          onChange={(e) => setSearchText(e.target.value)}
-        />
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-2 w-full">
+          <input
+            type="text"
+            placeholder="ค้นหา งาน..."
+            className="border rounded-lg px-3 py-2 flex-1 w-full"
+            onChange={(e) => setSearchText(e.target.value)}
+          />
 
-        <button
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg ml-auto"
-          onClick={() => router.push("/addtask")}
-        >
-          + Add Task
-        </button>
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg w-full sm:w-auto"
+            onClick={() => router.push("/addtask")}
+          >
+            + Add Task
+          </button>
+        </div>
       </div>
 
-      {/* Sections */}
-      {!statusFilter && (
-        <>
-          <Section
-            title="งานที่ต้องทำ - To do"
-            emptyText="คุณยังไม่มีงานที่ค้างอยู่"
-            items={grouped.todo}
-            onStart={handleStart}
-            onDone={handleDone}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-          />
-
-          <Section
-            title="งานที่กำลังทำ - In Progress"
-            emptyText="คุณยังไม่มีงานที่เริ่มทำ"
-            items={grouped.in_progress}
-            onStart={handleStart}
-            onDone={handleDone}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-          />
-
-          <Section
-            title="งานที่เสร็จแล้ว - Done"
-            emptyText="คุณยังไม่มีงานที่ทำเสร็จ"
-            items={grouped.done}
-            onStart={handleStart}
-            onDone={handleDone}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-          />
-
-          <Section
-            title="งานที่เลยกำหนด - Over Due"
-            emptyText="คุณยังไม่มีงานที่เลยกำหนด"
-            items={grouped.overdue}
-            onStart={handleStart}
-            onDone={handleDone}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-          />
-        </>
-      )}
-
-      {statusFilter && (
-        <>
-          {statusFilter === "todo" && (
+      {/* Sections: keep Section component, responsive spacing */}
+      <div className="mt-6 space-y-8">
+        {!statusFilter && (
+          <>
             <Section
               title="งานที่ต้องทำ - To do"
               emptyText="คุณยังไม่มีงานที่ค้างอยู่"
@@ -238,9 +200,7 @@ export default function DashboardPage() {
               onDelete={handleDelete}
               onEdit={handleEdit}
             />
-          )}
 
-          {statusFilter === "in_progress" && (
             <Section
               title="งานที่กำลังทำ - In Progress"
               emptyText="คุณยังไม่มีงานที่เริ่มทำ"
@@ -250,9 +210,7 @@ export default function DashboardPage() {
               onDelete={handleDelete}
               onEdit={handleEdit}
             />
-          )}
 
-          {statusFilter === "done" && (
             <Section
               title="งานที่เสร็จแล้ว - Done"
               emptyText="คุณยังไม่มีงานที่ทำเสร็จ"
@@ -262,9 +220,7 @@ export default function DashboardPage() {
               onDelete={handleDelete}
               onEdit={handleEdit}
             />
-          )}
 
-          {statusFilter === "over_due" && (
             <Section
               title="งานที่เลยกำหนด - Over Due"
               emptyText="คุณยังไม่มีงานที่เลยกำหนด"
@@ -274,9 +230,61 @@ export default function DashboardPage() {
               onDelete={handleDelete}
               onEdit={handleEdit}
             />
-          )}
-        </>
-      )}
+          </>
+        )}
+
+        {statusFilter && (
+          <>
+            {statusFilter === "todo" && (
+              <Section
+                title="งานที่ต้องทำ - To do"
+                emptyText="คุณยังไม่มีงานที่ค้างอยู่"
+                items={grouped.todo}
+                onStart={handleStart}
+                onDone={handleDone}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+              />
+            )}
+
+            {statusFilter === "in_progress" && (
+              <Section
+                title="งานที่กำลังทำ - In Progress"
+                emptyText="คุณยังไม่มีงานที่เริ่มทำ"
+                items={grouped.in_progress}
+                onStart={handleStart}
+                onDone={handleDone}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+              />
+            )}
+
+            {statusFilter === "done" && (
+              <Section
+                title="งานที่เสร็จแล้ว - Done"
+                emptyText="คุณยังไม่มีงานที่ทำเสร็จ"
+                items={grouped.done}
+                onStart={handleStart}
+                onDone={handleDone}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+              />
+            )}
+
+            {statusFilter === "overdue" && (
+              <Section
+                title="งานที่เลยกำหนด - Over Due"
+                emptyText="คุณยังไม่มีงานที่เลยกำหนด"
+                items={grouped.overdue}
+                onStart={handleStart}
+                onDone={handleDone}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+              />
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }

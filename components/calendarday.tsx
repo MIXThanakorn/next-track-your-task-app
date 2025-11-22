@@ -19,26 +19,34 @@ export default function CalendarDay({ day, tasks, dateStr }: Props) {
     <>
       <div
         onClick={() => hasTask && setOpen(true)}
-        className={`h-28 p-2 rounded-lg cursor-pointer transition border
+        className={`h-20 md:h-28 p-1.5 md:p-2 rounded-lg cursor-pointer transition border flex flex-col
         ${
           hasTask
             ? "bg-blue-100 border-blue-400 hover:bg-blue-200"
-            : "bg-gray-50"
+            : "bg-gray-50 border-gray-200"
         }
         `}
       >
+        {/* วันที่ */}
         <p
-          className={`font-semibold ${
+          className={`font-semibold text-sm md:text-base ${
             hasTask ? "text-blue-700" : "text-gray-700"
           }`}
         >
           {day}
         </p>
 
+        {/* จำนวนงาน */}
         {hasTask ? (
-          <p className="text-xs text-blue-700 mt-1">{tasks.length} งาน</p>
+          <div className="mt-auto">
+            <p className="text-[10px] md:text-xs text-blue-700">
+              {tasks.length} งาน
+            </p>
+          </div>
         ) : (
-          <p className="text-xs text-gray-400 mt-1">ไม่มีงาน</p>
+          <div className="mt-auto">
+            <p className="text-[10px] md:text-xs text-gray-400">ไม่มีงาน</p>
+          </div>
         )}
       </div>
 

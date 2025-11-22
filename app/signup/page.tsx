@@ -2,9 +2,10 @@
 
 import { useState, ChangeEvent } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import bcrypt from "bcryptjs";
+import Link from "next/link";
 
 export default function SignUpPage() {
   const [preview, setPreview] = useState<string | null>(null);
@@ -18,6 +19,8 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("");
   const [gender, setGender] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   // ตรวจสอบ email format
   const validateEmail = (email: string) => {
@@ -179,11 +182,33 @@ export default function SignUpPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-8 space-y-6 border border-blue-100 mt-10 mb-10">
+        <div className="flex items-center gap-3 mb-4">
+          <button
+            onClick={() => router.push("/")}
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            <span className="font-medium">Back to HomePage</span>
+          </button>
+        </div>
         <h1 className="text-2xl font-semibold text-center text-blue-600">
-          Create Account
+          สมัครสมาชิก
         </h1>
         <p className="text-center text-gray-500 text-sm">
-          Join us and start tracking your tasks efficiently
+          เข้าร่วมกับเราและเริ่มติดตามงานของคุณอย่างมีประสิทธิภาพ
         </p>
 
         {/* Upload Image */}
@@ -228,7 +253,7 @@ export default function SignUpPage() {
               htmlFor="username"
               className="block text-sm font-medium text-gray-700"
             >
-              User Name
+              ชื่อผู้ใช้
             </label>
             <input
               id="username"
@@ -244,7 +269,7 @@ export default function SignUpPage() {
               htmlFor="fullname"
               className="block text-sm font-medium text-gray-700"
             >
-              Full Name
+              ชื่อ-นามสกุล
             </label>
             <input
               id="fullname"
@@ -278,7 +303,7 @@ export default function SignUpPage() {
               htmlFor="phone"
               className="block text-sm font-medium text-gray-700"
             >
-              Phone Number
+              เบอร์โทรศัพท์
             </label>
             <input
               id="phone"
@@ -299,7 +324,7 @@ export default function SignUpPage() {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
             >
-              Password
+              รหัสผ่าน
             </label>
             <input
               id="password"
@@ -361,7 +386,7 @@ export default function SignUpPage() {
           {/* Gender Radio */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Gender
+              เพศ
             </label>
             <div className="flex gap-6">
               <label className="flex items-center gap-2">
@@ -374,7 +399,7 @@ export default function SignUpPage() {
                   onChange={(e) => setGender(e.target.value)}
                   className="text-blue-500"
                 />
-                <span>Male</span>
+                <span>ชาย</span>
               </label>
               <label className="flex items-center gap-2">
                 <input
@@ -386,7 +411,7 @@ export default function SignUpPage() {
                   onChange={(e) => setGender(e.target.value)}
                   className="text-blue-500"
                 />
-                <span>Female</span>
+                <span>หญิง</span>
               </label>
               <label className="flex items-center gap-2">
                 <input
@@ -398,7 +423,7 @@ export default function SignUpPage() {
                   onChange={(e) => setGender(e.target.value)}
                   className="text-blue-500"
                 />
-                <span>Other</span>
+                <span>อื่นๆ</span>
               </label>
             </div>
           </div>
@@ -412,7 +437,7 @@ export default function SignUpPage() {
             disabled={loading}
             className="w-full mr-2 bg-blue-500 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
           >
-            {loading ? "Processing..." : "Sign Up"}
+            {loading ? "กําลังสมัคร...." : "สมัครสมาชิก"}
           </button>
           <button
             id="reset_button"
@@ -420,18 +445,18 @@ export default function SignUpPage() {
             disabled={loading}
             className="w-full ml-2 bg-orange-400 text-white py-2 rounded-lg font-medium hover:bg-orange-600 transition"
           >
-            Reset
+            ล้าง
           </button>
         </div>
 
         {/* Signin link */}
         <p className="text-center text-sm text-gray-600">
-          Already have an account?{" "}
+          มีบัญชีแล้ว?{" "}
           <Link
             href="/signin"
             className="text-blue-600 font-medium hover:underline"
           >
-            Sign In
+            เข้าสู่ระบบ
           </Link>
         </p>
       </div>
