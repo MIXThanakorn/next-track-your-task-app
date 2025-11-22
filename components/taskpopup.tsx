@@ -92,7 +92,7 @@ export default function TaskPopup({ tasks, dateStr, onClose }: Props) {
                   <button
                     className="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition"
                     onClick={() => {
-                      localStorage.setItem("edit_task_id", t.task_id);
+                      localStorage.setItem("task_id", t.task_id);
                       router.push("/edittask");
                     }}
                   >
