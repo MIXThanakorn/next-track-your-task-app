@@ -10,7 +10,7 @@ export default function HomePage() {
 
       {/* Content - Darker background for separation */}
       <div className="flex-1 flex items-center justify-center bg-gray-200">
-        <div className="w-full px-4 md:px-8 py-8 md:py-16 flex flex-col items-center justify-center">
+        <div className="w-full px-4 md:px-8 py-0.5 md:py-3 flex flex-col items-center justify-center">
           {/* Main Image */}
           <div className="relative w-full max-w-xs md:max-w-2xl lg:max-w-4xl">
             <Image
@@ -18,13 +18,13 @@ export default function HomePage() {
               alt="Track Your Task - จัดการงานของคุณได้ง่ายขึ้น"
               width={1050}
               height={500}
-              className="w-full h-auto object-contain rounded-lg shadow-lg"
+              className="w-full h-auto object-contain rounded-lg"
               priority
             />
           </div>
 
           {/* Caption/Description below image */}
-          <div className="mt-6 md:mt-8 max-w-xs md:max-w-2xl text-center">
+          <div className="mt-8 md:mt-12 my-12 md:my-18 max-w-xs md:max-w-2xl text-center">
             <h2 className="text-xl md:text-3xl font-bold text-blue-700 mb-3 md:mb-4">
               จัดการงานของคุณได้อย่างมีประสิทธิภาพ
             </h2>

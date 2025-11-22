@@ -6,18 +6,7 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <footer className="bg-blue-700 text-white py-6 md:py-10 px-4 md:px-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 text-center md:text-left">
-        {/* Logo + Website Name */}
-        <div className="flex flex-col items-center md:items-start space-y-2 md:space-y-3">
-          <div className="w-10 h-10 md:w-12 md:h-12 relative bg-white rounded-xl p-1">
-            <Image src="/Logo.png" alt="Logo" fill className="object-contain" />
-          </div>
-          <h2 className="text-lg md:text-xl font-semibold">Track Your Task</h2>
-          <p className="text-xs md:text-sm opacity-80 max-w-xs">
-            ระบบช่วยจัดการงานและติดตามภารกิจของคุณ
-          </p>
-        </div>
-
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 text-center md:text-left">
         {/* About Section */}
         <div className="flex flex-col items-center md:items-start">
           <h3 className="text-base md:text-lg font-semibold mb-2">
