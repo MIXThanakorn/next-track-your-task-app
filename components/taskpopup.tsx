@@ -2,6 +2,7 @@
 
 import { TaskItem } from "@/types/task";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   tasks: TaskItem[];
@@ -26,6 +27,8 @@ export default function TaskPopup({ tasks, dateStr, onClose }: Props) {
     const order = { high: 1, medium: 2, low: 3 };
     return order[a.priority] - order[b.priority];
   });
+
+  const router = useRouter();
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[999] p-4">
@@ -90,7 +93,7 @@ export default function TaskPopup({ tasks, dateStr, onClose }: Props) {
                     className="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition"
                     onClick={() => {
                       localStorage.setItem("edit_task_id", t.task_id);
-                      window.location.href = "/edittask";
+                      router.push("/edittask");
                     }}
                   >
                     Edit
