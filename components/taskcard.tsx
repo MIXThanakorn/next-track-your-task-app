@@ -105,6 +105,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 onClick={() => onStart(task.task_id)}
                 className="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                title="Start Work"
               >
                 <FaPlay />
               </button>
@@ -112,6 +113,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 onClick={() => onEdit(task.task_id)}
                 className="px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+                title="Edit Work"
               >
                 <FaEdit />
               </button>
@@ -119,6 +121,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 onClick={() => onDelete(task.task_id)}
                 className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                title="Dissmiss"
               >
                 <FaTrash />
               </button>
@@ -130,6 +133,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 onClick={() => onDone(task.task_id)}
                 className="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                title="Mark as Done"
               >
                 <FaCheck />
               </button>
@@ -137,6 +141,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 onClick={() => onEdit(task.task_id)}
                 className="px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+                title="Edit Work"
               >
                 <FaEdit />
               </button>
@@ -144,6 +149,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 onClick={() => onDelete(task.task_id)}
                 className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                title="Dissmiss"
               >
                 <FaTrash />
               </button>
@@ -162,6 +168,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 onClick={() => onDelete(task.task_id)}
                 className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                title="Dissmiss"
               >
                 <FaTrash />
               </button>
@@ -173,6 +180,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 onClick={() => onDelete(task.task_id)}
                 className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                title="Dissmiss"
               >
                 <FaTrash />
               </button>

@@ -140,37 +140,41 @@ export default function DashboardPage() {
   return (
     <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       {/* Header: responsive grid (1 col on mobile, row on md+) */}
-      <div className="bg-white shadow-md p-4 rounded-xl grid grid-cols-1 sm:grid-cols-2 md:flex md:items-center gap-3 md:gap-4">
-        <div className="flex gap-3 w-full">
-          <select
-            className="border rounded-lg px-3 py-2 w-1/2 sm:w-40"
-            onChange={(e) =>
-              setStatusFilter(e.target.value === "none" ? null : e.target.value)
-            }
-          >
-            <option value="none">Status (ทั้งหมด)</option>
-            <option value="todo">To do</option>
-            <option value="in_progress">In progress</option>
-            <option value="done">Done</option>
-            <option value="overdue">Over Due</option>
-          </select>
+      <div className="bg-white shadow-md p-4 rounded-xl">
+        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
+          {/* Filters Section */}
+          <div className="flex gap-3 md:gap-4">
+            <select
+              className="border rounded-lg px-3 py-2 w-1/2 md:w-40"
+              onChange={(e) =>
+                setStatusFilter(
+                  e.target.value === "none" ? null : e.target.value
+                )
+              }
+            >
+              <option value="none">Status (ทั้งหมด)</option>
+              <option value="todo">To do</option>
+              <option value="in_progress">In progress</option>
+              <option value="done">Done</option>
+              <option value="overdue">Over Due</option>
+            </select>
 
-          <select
-            className="border rounded-lg px-3 py-2 w-1/2 sm:w-40"
-            onChange={(e) =>
-              setPriorityFilter(
-                e.target.value === "none" ? null : e.target.value
-              )
-            }
-          >
-            <option value="none">Priority (ทั้งหมด)</option>
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
-          </select>
-        </div>
+            <select
+              className="border rounded-lg px-3 py-2 w-1/2 md:w-40"
+              onChange={(e) =>
+                setPriorityFilter(
+                  e.target.value === "none" ? null : e.target.value
+                )
+              }
+            >
+              <option value="none">Priority (ทั้งหมด)</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-2 w-full">
+          {/* Search Bar - ขยายเต็มที่บน PC */}
           <input
             type="text"
             placeholder="ค้นหา งาน..."
@@ -178,8 +182,9 @@ export default function DashboardPage() {
             onChange={(e) => setSearchText(e.target.value)}
           />
 
+          {/* Add Task Button */}
           <button
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg w-full sm:w-auto"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg whitespace-nowrap w-full md:w-auto"
             onClick={() => router.push("/addtask")}
           >
             + Add Task

@@ -28,6 +28,18 @@ export default function AddTaskPage() {
       return;
     }
 
+    // ตรวจสอบ due date ห้ามเป็นวันอดีต
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const selectedDue = new Date(dueDate);
+    selectedDue.setHours(0, 0, 0, 0);
+
+    if (selectedDue < today) {
+      alertStyled("วันกำหนดส่งต้องไม่เป็นวันก่อนหน้า", false);
+      return;
+    }
+
     const user_id = localStorage.getItem("user_id");
     if (!user_id) {
       alertStyled("ไม่พบข้อมูลผู้ใช้ กรุณาเข้าสู่ระบบใหม่", false);

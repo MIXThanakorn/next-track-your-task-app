@@ -13,7 +13,7 @@ type MenuItem = {
 const menuItems: MenuItem[] = [
   { name: "Dashboard", path: "/dashboard", icon: "🏠" },
   { name: "Analytic", path: "/dashboard/analytic", icon: "📊" },
-  { name: "Calendar", path: "/dashboard/calender", icon: "📅" },
+  { name: "Calendar", path: "/dashboard/calendar", icon: "📅" },
 ];
 
 interface SideMenuProps {

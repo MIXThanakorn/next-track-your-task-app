@@ -223,17 +223,17 @@ export default function DashboardPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          <div className="p-4 bg-white rounded-xl border shadow">
+          <div className="p-4 bg-teal-200 rounded-xl border shadow">
             <div className="text-sm text-gray-600">Total Tasks</div>
             <div className="text-3xl font-bold">{stats.total}</div>
           </div>
 
-          <div className="p-4 bg-white rounded-xl border shadow">
+          <div className="p-4 bg-green-200 rounded-xl border shadow">
             <div className="text-sm text-gray-600">Completed</div>
             <div className="text-3xl font-bold">{stats.done}</div>
           </div>
 
-          <div className="p-4 bg-white rounded-xl border shadow">
+          <div className="p-4 bg-red-200 rounded-xl border shadow">
             <div className="text-sm text-gray-600">Incomplete</div>
             <div className="text-3xl font-bold">{stats.notDone}</div>
           </div>
@@ -255,7 +255,7 @@ export default function DashboardPage() {
               {upcoming.map((t) => (
                 <div
                   key={t.task_id}
-                  className="p-3 border rounded-lg mb-2 bg-gray-50"
+                  className="p-3 border rounded-lg mb-2 bg-teal-100"
                 >
                   <div className="font-semibold">{t.task_name}</div>
                   <div className="text-sm text-gray-500">

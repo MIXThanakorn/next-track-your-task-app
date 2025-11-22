@@ -16,7 +16,7 @@ export default function BottomNav() {
     },
     {
       name: "Calendar",
-      path: "/dashboard/calender",
+      path: "/dashboard/calendar",
       icon: <CalendarDays size={22} />,
     },
   ];
