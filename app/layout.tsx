@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Track Your Task App",
   description: "Track Your Task App.",
   icons: {
-    icon: "/vercel.svg",
+    icon: "/favicon.ico",
   },
 };
 
