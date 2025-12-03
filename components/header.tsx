@@ -11,7 +11,12 @@ export default function Header() {
         <div className="flex items-center space-x-2">
           {/* Logo */}
           <div className="w-8 h-8 md:w-10 md:h-10 relative">
-            <Image src="/Logo.png" alt="Logo" fill className="object-contain" />
+            <Image
+              src="/icon1.png"
+              alt="Logo"
+              fill
+              className="object-contain"
+            />
           </div>
           <span className="text-base md:text-xl font-semibold text-blue-700">
             Track Your Task
