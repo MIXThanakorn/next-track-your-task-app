@@ -46,7 +46,12 @@ export default function DashboardHeader() {
         {/* LEFT */}
         <div className="flex items-center space-x-2">
           <div className="relative w-8 h-8 sm:w-10 sm:h-10">
-            <Image src="/Logo.png" alt="Logo" fill className="object-contain" />
+            <Image
+              src="/icon1.png"
+              alt="Logo"
+              fill
+              className="object-contain"
+            />
           </div>
 
           <span className="text-lg sm:text-2xl font-bold text-blue-700">

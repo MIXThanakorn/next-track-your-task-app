@@ -158,12 +158,25 @@ const TaskCard: React.FC<TaskCardProps> = ({
 
           {task.status === "done" && (
             <>
-              <p className="text-gray-500 text-sm">
-                Finished:{" "}
-                {task.finished_date
-                  ? new Date(task.finished_date).toISOString().split("T")[0]
-                  : "-"}
-              </p>
+              {(() => {
+                const finished = task.finished_date
+                  ? new Date(task.finished_date)
+                  : null;
+                const due = task.due_date ? new Date(task.due_date) : null;
+
+                // เช็กว่า finished เกิน due_date หรือไม่
+                const isLate = finished && due && finished > due;
+
+                return (
+                  <p className="text-gray-500 text-sm flex items-center gap-1">
+                    Finished:{" "}
+                    {finished ? finished.toISOString().split("T")[0] : "-"}
+                    {isLate && (
+                      <span className="text-red-600 font-semibold">(Late)</span>
+                    )}
+                  </p>
+                );
+              })()}
 
               <button
                 onClick={() => onDelete(task.task_id)}
@@ -176,14 +189,36 @@ const TaskCard: React.FC<TaskCardProps> = ({
           )}
 
           {task.status === "overdue" && (
-            <div className="w-full flex justify-end">
-              <button
-                onClick={() => onDelete(task.task_id)}
-                className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                title="Dissmiss"
-              >
-                <FaTrash />
-              </button>
+            <div className="w-full flex justify-between items-center">
+              {/* ถ้า start_date มีค่า → ให้ปุ่ม Mark as Done แสดงขึ้นมา */}
+              {task.start_date ? (
+                <>
+                  <button
+                    onClick={() => onDone(task.task_id)}
+                    className="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                    title="Mark as Done"
+                  >
+                    <FaCheck />
+                  </button>
+
+                  <button
+                    onClick={() => onDelete(task.task_id)}
+                    className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                    title="Dissmiss"
+                  >
+                    <FaTrash />
+                  </button>
+                </>
+              ) : (
+                // ถ้าไม่มี start_date แสดงเฉพาะปุ่มลบเหมือนเดิม
+                <button
+                  onClick={() => onDelete(task.task_id)}
+                  className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 ml-auto"
+                  title="Dissmiss"
+                >
+                  <FaTrash />
+                </button>
+              )}
             </div>
           )}
         </div>
